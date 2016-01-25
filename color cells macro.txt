@@ -1,0 +1,51 @@
+Sub ColorCells()
+' Andrew Fairless, May 2011
+' This program colors cells within a pre-selected area
+' Specifically, the program colors cells with values < 0.05 yellow; between 0.05 and 0.10 orange; and between 0.10 and 0.15 light green
+' The cells' values are intended to be p-values, with the different colors corresponding to levels of significance
+
+'Dim DataRange
+Dim Cell As Range
+Dim FormulaCells As Range
+Dim ConstantCells As Range
+Const YellowIndex = 6
+Const OrangeIndex = 46
+Const PaleGreenIndex = 35
+Const Alpha = 0.05
+
+On Error Resume Next
+Application.ScreenUpdating = False
+
+Set FormulaCells = Selection.SpecialCells(xlFormulas, xlNumbers)
+Set ConstantCells = Selection.SpecialCells(xlConstants, xlNumbers)
+On Error GoTo 0
+
+If Not FormulaCells Is Nothing Then
+    For Each Cell In FormulaCells
+        If Cell.Value < Alpha Then
+            Cell.Interior.ColorIndex = YellowIndex
+        ElseIf ((Cell.Value >= Alpha) And (Cell.Value < Alpha * 2)) Then
+            Cell.Interior.ColorIndex = OrangeIndex
+        ElseIf ((Cell.Value >= Alpha * 2) And (Cell.Value < Alpha * 3)) Then
+            Cell.Interior.ColorIndex = PaleGreenIndex
+        Else
+            Cell.Interior.ColorIndex = xlNone
+        End If
+    Next Cell
+End If
+
+If Not ConstantCells Is Nothing Then
+    For Each Cell In ConstantCells
+        If Cell.Value < Alpha Then
+            Cell.Interior.ColorIndex = YellowIndex
+        ElseIf ((Cell.Value >= Alpha) And (Cell.Value < Alpha * 2)) Then
+            Cell.Interior.ColorIndex = OrangeIndex
+        ElseIf ((Cell.Value >= Alpha * 2) And (Cell.Value < Alpha * 3)) Then
+            Cell.Interior.ColorIndex = PaleGreenIndex
+        Else
+            Cell.Interior.ColorIndex = xlNone
+        End If
+    Next Cell
+End If
+
+End Sub
